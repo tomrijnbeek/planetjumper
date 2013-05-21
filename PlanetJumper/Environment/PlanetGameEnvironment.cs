@@ -9,6 +9,9 @@ namespace PlanetJumper.Environment
 {
     class PlanetGameEnvironment : GameEnvironment<PlanetGameEnvironment>
     {
+        // tmp
+        bool dead = false;
+
         public GraphicsManager Graphics
         {
             get;
@@ -35,8 +38,11 @@ namespace PlanetJumper.Environment
 
         public override void Update(UpdateEventArgs e)
         {
-            base.Update(e);
-            this.updateMatrices(e);
+            if (!this.dead)
+            {
+                base.Update(e);
+                this.updateMatrices(e);
+            }
         }
 
         private void updateMatrices(UpdateEventArgs e)
@@ -63,13 +69,25 @@ namespace PlanetJumper.Environment
         public override void Draw(UpdateEventArgs e)
         {
             base.Draw(e);
+
+            if (this.dead)
+            {
+                this.Graphics.TrailGeometry.Color = Color.Red;
+                this.Graphics.TrailGeometry.DrawLine(-640, -360, 640, 360);
+                this.Graphics.TrailGeometry.DrawLine(640, -360, -640, 360);
+            }
         }
 
-        public void AddPlanet(Vector2 position, float radius)
+        public void AddPlanet(IPlanetFactory factory, Vector2 position, float radius)
         {
-            Planet p = new Planet(this, position, radius);
+            Planet p = factory.Create(this, position, radius);
             this.Planets.AddLast(p);
             this.AddWorldObject(p.ID, p);
+        }
+
+        public void Die()
+        {
+            this.dead = true;
         }
     }
 }

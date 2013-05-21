@@ -110,6 +110,9 @@ namespace PlanetJumper.Environment
             Vector2 delta = this.position - p.Position;
             this.planet = p;
             this.planetPosition = (float)Math.Atan2(delta.Y, delta.X);
+
+            if (p is FirePlanet)
+                this.environment.Die();
         }
     }
 }

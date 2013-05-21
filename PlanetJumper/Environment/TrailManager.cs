@@ -44,7 +44,7 @@ namespace PlanetJumper.Environment
         private void calculateColor()
         {
             float l = (this.From - this.To).Length;
-            this.Color = Color.FromHSVA(GameMath.Lerp(MathHelper.PiOver3 * 2, 0, (l - 6.4f) / 12f), 1, 1);
+            this.Color = Color.FromHSVA(GameMath.Lerp(MathHelper.PiOver3 * 2, 0, (l - 6.4f) / 12f), 1, 1, 100);
         }
 
         public void Draw(PrimitiveGeometry geo)
