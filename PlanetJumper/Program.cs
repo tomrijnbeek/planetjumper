@@ -38,10 +38,12 @@ namespace PlanetJumper
 
             // Create worldobjects
             this.environment = new PlanetGameEnvironment(this, this.graphics);
-            this.environment.AddPlanet(new Vector2(80, -110), 70);
-            this.environment.AddPlanet(new Vector2(-490, -240), 30);
-            this.environment.AddPlanet(new Vector2(640, 140), 65);
-            this.environment.AddPlanet(new Vector2(310, -295), 25);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(80, -110), 70);
+            this.environment.AddPlanet(new FirePlanetFactory(), new Vector2(-490, -240), 30);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(640, 140), 65);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(310, -295), 25);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(-200, 300), 35);
+            this.environment.AddPlanet(new FirePlanetFactory(), new Vector2(-300, 270), 15);
             this.environment.AddWorldObject("jumper", new Jumper(this.environment, new Vector2(-490, -310)));
         }
 

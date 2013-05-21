@@ -54,7 +54,12 @@
     <Compile Include="Environment\PlanetGameEnvironment.cs" />
     <Compile Include="Environment\DrawableWorldObject.cs" />
     <Compile Include="Environment\GameEnvironment.cs" />
-    <Compile Include="Environment\Planet.cs" />
+    <Compile Include="Environment\Planets\Factories\FirePlanetFactory.cs" />
+    <Compile Include="Environment\Planets\Factories\IPlanetFactory.cs" />
+    <Compile Include="Environment\Planets\OrdinaryPlanet.cs" />
+    <Compile Include="Environment\Planets\Factories\OrdinaryPlanetFactory.cs" />
+    <Compile Include="Environment\Planets\FirePlanet.cs" />
+    <Compile Include="Environment\Planets\Planet.cs" />
     <Compile Include="Environment\SpriteWorldObject.cs" />
     <Compile Include="Environment\TrailManager.cs" />
     <Compile Include="Environment\WorldObject.cs" />

@@ -71,7 +71,8 @@ namespace PlanetJumper
             this.TrailSurface.AddSettings(
                 this.modelview,
                 this.projection,
-                SurfaceDepthMaskSetting.DontMask
+                SurfaceDepthMaskSetting.DontMask,
+                SurfaceBlendSetting.Alpha
             );
 
             this.TrailSurface.SetShaderProgram(simpleShader);
