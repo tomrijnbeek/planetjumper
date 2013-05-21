@@ -22,6 +22,11 @@ namespace PlanetJumper.Environment
             get;
             private set;
         }
+        public float Offset
+        {
+            get;
+            private set;
+        }
 
         public LinkedList<Planet> Planets { get; private set; }
         public TrailManager Trail { get; private set; }
@@ -34,12 +39,15 @@ namespace PlanetJumper.Environment
             this.Trail = new TrailManager(this);
             this.AddWorldObject("trail", this.Trail);
             this.CameraMatrix = Matrix4.Identity;
+
+            this.AddWorldObject("generator", new LevelGenerator(this));
         }
 
         public override void Update(UpdateEventArgs e)
         {
             if (!this.dead)
             {
+                this.Offset += 64 * (float)e.ElapsedTimeInS;
                 base.Update(e);
                 this.updateMatrices(e);
             }
@@ -48,14 +56,14 @@ namespace PlanetJumper.Environment
         private void updateMatrices(UpdateEventArgs e)
         {
             Jumper jumper = this.GetWorldObject<Jumper>("jumper");
-            if (GameMath.IsInRectangle(jumper.Position, -620, -340, 1240, 680))
-                this.CameraMatrix = Matrix4.Identity;
+            if (GameMath.IsInRectangle(jumper.Position, this.Offset - 620, -340, 1240, 680))
+                this.CameraMatrix = Matrix4.CreateTranslation(-this.Offset, 0, 0);
             else
             {
                 float top = Math.Max(360, jumper.Position.Y + 20);
-                float right = Math.Max(640, jumper.Position.X + 20);
+                float right = Math.Max(this.Offset + 640, jumper.Position.X + 20);
                 float bottom = Math.Min(-360, jumper.Position.Y - 20);
-                float left = Math.Min(-640, jumper.Position.X - 20);
+                float left = Math.Min(this.Offset - 640, jumper.Position.X - 20);
 
                 Matrix4 translation = Matrix4.CreateTranslation(-0.5f * (left + right), -0.5f * (top + bottom), 0);
                 Matrix4 scale = Matrix4.Scale(Math.Min(1280 / (right - left), 720 / (top - bottom)));

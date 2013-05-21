@@ -61,8 +61,8 @@ namespace PlanetJumper.Environment
                 }
 
                 // Artificial gravity if out of screen
-                acc.X += Math.Max(0, -this.position.X - 640) * artificialG;
-                acc.X -= Math.Max(0, this.position.X - 640) * artificialG;
+                acc.X += Math.Max(0, -this.position.X - this.environment.Offset - 640) * artificialG;
+                acc.X -= Math.Max(0, this.position.X - this.environment.Offset - 640) * artificialG;
                 acc.Y += Math.Max(0, -this.position.Y - 360) * artificialG;
                 acc.Y -= Math.Max(0, this.position.Y - 360) * artificialG;
 
@@ -75,9 +75,9 @@ namespace PlanetJumper.Environment
                 this.velocity = Vector2.Zero;
 
                 if (this.keyboard[Key.Left])
-                    this.planetPosition -= 50 * (float)e.ElapsedTimeInS / this.planet.Radius;
+                    this.planetPosition += 150 * (float)e.ElapsedTimeInS / this.planet.Radius;
                 if (this.keyboard[Key.Right])
-                    this.planetPosition += 50 * (float)e.ElapsedTimeInS / this.planet.Radius;
+                    this.planetPosition -= 150 * (float)e.ElapsedTimeInS / this.planet.Radius;
                 if (this.keyboard[Key.Space])
                 {
                     if (this.builtStrength == 0)
