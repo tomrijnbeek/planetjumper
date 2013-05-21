@@ -27,5 +27,10 @@ namespace PlanetJumper.Environment
         {
             this.environment.Graphics.PlanetGeometry.DrawSprite(this.position, 0, this.Radius);
         }
+
+        public bool IsOnScreen()
+        {
+            return this.Position.X + this.Radius + 640 + LevelGenerator.SideBuffer > this.environment.Offset;
+        }
     }
 }
