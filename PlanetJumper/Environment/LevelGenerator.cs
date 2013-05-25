@@ -26,10 +26,10 @@ namespace PlanetJumper.Environment
         private const float firePlanetChanceIncrease = 0.005f;
         private const float firePlanetChanceMax = 0.17f;
 
-        private const float repellingPlanetChanceThreshold = 3000;
+        private const float repellingPlanetChanceThreshold = 4000;
         private const float repellingPlanetChanceInitial = 0.01f;
         private const float repellingPlanetChanceIncrease = 0.0025f;
-        private const float repellingPlanetChanceMax = 0.09f;
+        private const float repellingPlanetChanceMax = 0.06f;
 
         private const float spacecoreChance = 1 / 18000; // expected: once per hour
         #endregion
@@ -37,6 +37,9 @@ namespace PlanetJumper.Environment
         private float asteroidChance = asteroidChanceInitial;
         private float fireplanetChance = 0;
         private float repellingPlanetChance = 0;
+
+        private int fireplanetCount = 0;
+        private int repellingPlanetCount = 0;
 
         public LevelGenerator(PlanetGameEnvironment env)
             : base(env)
@@ -70,6 +73,12 @@ namespace PlanetJumper.Environment
             while (!this.planets.First.Value.IsOnScreen())
             {
                 this.environment.RemoveWorldObject(this.planets.First.Value.ID);
+
+                if (this.planets.First.Value is FirePlanet)
+                    this.fireplanetCount--;
+                if (this.planets.First.Value is RepellingPlanet)
+                    this.repellingPlanetCount--;
+
                 this.environment.Planets.RemoveFirst();
             }
 
@@ -139,6 +148,9 @@ namespace PlanetJumper.Environment
             foreach (Planet p in this.planets)
                 if ((p.Position - position).LengthSquared <= (r + p.Radius) * (r + p.Radius))
                     return false;
+            foreach (Asteroid a in this.asteroids)
+                if ((a.Position - position).LengthSquared <= (r + a.Radius) * (r + a.Radius))
+                    return false;
 
             return true;
         }
@@ -150,9 +162,9 @@ namespace PlanetJumper.Environment
         private IPlanetFactory selectFactory()
         {
             double a = GlobalRandom.NextDouble();
-            if (a < this.fireplanetChance)
+            if (a < this.fireplanetChance && this.fireplanetCount < 2 * minPlanets * this.fireplanetChance)
                 return new FirePlanetFactory();
-            else if (a < this.repellingPlanetChance + this.fireplanetChance)
+            else if (a < this.repellingPlanetChance + this.fireplanetChance && this.repellingPlanetCount < 2 * minPlanets * this.repellingPlanetChance)
                 return new RepellingPlanetFactory();
             else
                 return new OrdinaryPlanetFactory();

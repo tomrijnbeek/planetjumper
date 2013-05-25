@@ -59,7 +59,8 @@ namespace PlanetJumper
             // These matrices create a pixel perfect projection with a scale from 1:1 from the z=0 plane to the screen.
             this.graphics.SetMatrices(
                 this.environment.CameraMatrix * Matrix4.LookAt(-2f * Vector3.UnitZ, Vector3.UnitZ, -Vector3.UnitY),
-                Matrix4.CreatePerspectiveOffCenter(-w / 4f, w / 4f, h / 4f, -h / 4f, 1f, 64f)
+                Matrix4.CreatePerspectiveOffCenter(-w / 4f, w / 4f, h / 4f, -h / 4f, 1f, 64f),
+                Matrix4.LookAt(-2f * Vector3.UnitZ, Vector3.UnitZ, -Vector3.UnitY)
             );
         }
 
@@ -78,6 +79,7 @@ namespace PlanetJumper
 
             this.environment.Draw(e);
 
+            this.graphics.BackgroundSurface.Render();
             this.graphics.PlanetSurface.Render();
             this.graphics.JumperSurface.Render();
             this.graphics.TrailSurface.Render();
