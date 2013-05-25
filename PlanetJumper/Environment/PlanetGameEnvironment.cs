@@ -53,7 +53,7 @@ namespace PlanetJumper.Environment
         public override void Update(UpdateEventArgs e)
         {
             this.Offset = Math.Max(this.Offset + this.speed * (float)e.ElapsedTimeInS, this.GetWorldObject<Jumper>("jumper").Position.X - 540);
-            this.speed += (float)(e.ElapsedTimeInS) * 1.5f;
+            this.speed += (float)(e.ElapsedTimeInS) * 2.0f;
             this.updateMatrices(e);
             base.Update(e);
         }
@@ -74,11 +74,13 @@ namespace PlanetJumper.Environment
                 this.CameraMatrix = translation * scale;
             }
 
-            this.Graphics.SetMatrices(this.CameraMatrix * Matrix4.LookAt(-2f * Vector3.UnitZ, Vector3.UnitZ, -Vector3.UnitY), null);
+            this.Graphics.SetMatrices(this.CameraMatrix * Matrix4.LookAt(-2f * Vector3.UnitZ, Vector3.UnitZ, -Vector3.UnitY), null, null);
         }
 
         public override void Draw(UpdateEventArgs e)
         {
+            this.Graphics.BackgroundGeometry.DrawSprite(Vector2.Zero);
+
             base.Draw(e);
 
             if (this.State == GameState.DEAD)
@@ -104,6 +106,7 @@ namespace PlanetJumper.Environment
 
         public void Die()
         {
+            Console.WriteLine("Score: " + this.Offset.ToString());
             this.State = GameState.DEAD;
         }
     }

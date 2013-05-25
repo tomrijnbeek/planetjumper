@@ -9,14 +9,17 @@ namespace PlanetJumper
     {
         // Matrices
         Matrix4Uniform modelview;
+        Matrix4Uniform hudMatrix;
         Matrix4Uniform projection;
 
+        public QuadSurface<UVColorVertexData> BackgroundSurface { get; private set; }
         public QuadSurface<UVColorVertexData> PlanetSurface { get; private set; }
         public QuadSurface<UVColorVertexData> AsteroidSurface { get; private set; }
         public QuadSurface<UVColorVertexData> SpaceCoreSurface { get; private set; }
         public QuadSurface<UVColorVertexData> JumperSurface { get; private set; }
         public QuadSurface<PrimitiveVertexData> TrailSurface { get; private set; }
 
+        public Sprite2DGeometry BackgroundGeometry { get; private set; }
         public Sprite2DGeometry PlanetGeometry { get; private set; }
         public Sprite2DGeometry AsteroidGeometry { get; private set; }
         public Sprite2DGeometry SpaceCoreGeometry { get; private set; }
@@ -32,10 +35,30 @@ namespace PlanetJumper
             // Create matrix uniforms used for rendering.
             this.modelview = new Matrix4Uniform("modelviewMatrix");
             this.projection = new Matrix4Uniform("projectionMatrix");
+            this.hudMatrix = new Matrix4Uniform("modelviewMatrix");
 
             // Create the surfaces
+            #region Background surface
+            Texture t = new Texture("data/graphics/temporary-background.jpg");
+
+            this.BackgroundSurface = new QuadSurface<UVColorVertexData>();
+            this.BackgroundSurface.AddSettings(
+                this.hudMatrix,
+                this.projection,
+                new TextureUniform("diffusetexture", t),
+                SurfaceDepthMaskSetting.DontMask,
+                SurfaceBlendSetting.Alpha
+            );
+
+            this.BackgroundSurface.SetShaderProgram(uvShader);
+
+            this.BackgroundGeometry = new Sprite2DGeometry(this.BackgroundSurface);
+            this.BackgroundGeometry.Size = new Vector2(1280, 720);
+            this.BackgroundGeometry.Color.A = (byte)100;
+            #endregion
+
             #region Planet Surface
-            Texture t = new Texture("data/graphics/planet.png");
+            t = new Texture("data/graphics/planet.png");
 
             this.PlanetSurface = new QuadSurface<UVColorVertexData>();
             this.PlanetSurface.AddSettings(
@@ -122,12 +145,14 @@ namespace PlanetJumper
             #endregion
         }
 
-        public void SetMatrices(Matrix4? modelview, Matrix4? projection)
+        public void SetMatrices(Matrix4? modelview, Matrix4? projection, Matrix4? hud)
         {
             if (modelview.HasValue)
                 this.modelview.Matrix = modelview.Value;
             if (projection.HasValue)
                 this.projection.Matrix = projection.Value;
+            if (hud.HasValue)
+                this.hudMatrix.Matrix = hud.Value;
         }
     }
 }

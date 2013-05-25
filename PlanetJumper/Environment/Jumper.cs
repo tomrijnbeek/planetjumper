@@ -103,8 +103,8 @@ namespace PlanetJumper.Environment
 
             Vector2 prev = this.position;
             base.Update(e);
-            //if (this.position != prev)
-                //this.environment.Trail.AddTrail(prev, this.position);
+            if (this.position != prev)
+                this.environment.Trail.AddTrail(prev, this.position);
         }
 
         public override void Draw(UpdateEventArgs e)
