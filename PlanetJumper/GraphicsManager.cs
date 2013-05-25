@@ -12,10 +12,14 @@ namespace PlanetJumper
         Matrix4Uniform projection;
 
         public QuadSurface<UVColorVertexData> PlanetSurface { get; private set; }
+        public QuadSurface<UVColorVertexData> AsteroidSurface { get; private set; }
+        public QuadSurface<UVColorVertexData> SpaceCoreSurface { get; private set; }
         public QuadSurface<UVColorVertexData> JumperSurface { get; private set; }
         public QuadSurface<PrimitiveVertexData> TrailSurface { get; private set; }
 
         public Sprite2DGeometry PlanetGeometry { get; private set; }
+        public Sprite2DGeometry AsteroidGeometry { get; private set; }
+        public Sprite2DGeometry SpaceCoreGeometry { get; private set; }
         public Sprite2DGeometry JumperGeometry { get; private set; }
         public PrimitiveGeometry TrailGeometry { get; private set; }
 
@@ -46,6 +50,42 @@ namespace PlanetJumper
 
             this.PlanetGeometry = new Sprite2DGeometry(this.PlanetSurface);
             this.PlanetGeometry.Size = new Vector2(2, 2);
+            #endregion
+
+            #region Asteroid Surface
+            t = new Texture("data/graphics/asteroid.png");
+
+            this.AsteroidSurface = new QuadSurface<UVColorVertexData>();
+            this.AsteroidSurface.AddSettings(
+                this.modelview,
+                this.projection,
+                new TextureUniform("diffusetexture", t),
+                SurfaceDepthMaskSetting.DontMask,
+                SurfaceBlendSetting.Alpha
+            );
+
+            this.AsteroidSurface.SetShaderProgram(uvShader);
+
+            this.AsteroidGeometry = new Sprite2DGeometry(this.AsteroidSurface);
+            this.AsteroidGeometry.Size = new Vector2(2, 2);
+            #endregion
+
+            #region Space Core Surface
+            t = new Texture("data/graphics/spacecore.png");
+
+            this.SpaceCoreSurface = new QuadSurface<UVColorVertexData>();
+            this.SpaceCoreSurface.AddSettings(
+                this.modelview,
+                this.projection,
+                new TextureUniform("diffusetexture", t),
+                SurfaceDepthMaskSetting.DontMask,
+                SurfaceBlendSetting.Alpha
+            );
+
+            this.SpaceCoreSurface.SetShaderProgram(uvShader);
+
+            this.SpaceCoreGeometry = new Sprite2DGeometry(this.SpaceCoreSurface);
+            this.SpaceCoreGeometry.Size = new Vector2(30, 30);
             #endregion
 
             #region Jumper Surface
