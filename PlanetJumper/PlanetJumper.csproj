@@ -50,17 +50,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Environment\Asteroid.cs" />
     <Compile Include="Environment\Jumper.cs" />
     <Compile Include="Environment\LevelGenerator.cs" />
+    <Compile Include="Environment\PhysicsObject.cs" />
     <Compile Include="Environment\PlanetGameEnvironment.cs" />
     <Compile Include="Environment\DrawableWorldObject.cs" />
     <Compile Include="Environment\GameEnvironment.cs" />
     <Compile Include="Environment\Planets\Factories\FirePlanetFactory.cs" />
     <Compile Include="Environment\Planets\Factories\IPlanetFactory.cs" />
+    <Compile Include="Environment\Planets\Factories\RepellingPlanetFactory.cs" />
     <Compile Include="Environment\Planets\OrdinaryPlanet.cs" />
     <Compile Include="Environment\Planets\Factories\OrdinaryPlanetFactory.cs" />
     <Compile Include="Environment\Planets\FirePlanet.cs" />
     <Compile Include="Environment\Planets\Planet.cs" />
+    <Compile Include="Environment\Planets\RepellingPlanet.cs" />
+    <Compile Include="Environment\Spacecore.cs" />
     <Compile Include="Environment\SpriteWorldObject.cs" />
     <Compile Include="Environment\TrailManager.cs" />
     <Compile Include="Environment\WorldObject.cs" />
@@ -88,10 +93,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\graphics\asteroid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="data\graphics\jumper.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="data\graphics\planet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="data\graphics\spacecore.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -6,11 +6,9 @@ using PlanetJumper.Helpers;
 
 namespace PlanetJumper.Environment
 {
-    class Jumper : DrawableWorldObject<PlanetGameEnvironment>
+    class Jumper : PhysicsObject
     {
         public static readonly Vector2 Size = new Vector2(16, 32);
-        private const float G = 0.4f;
-        private const float artificialG = 0.1f;
         private const float jumpStrengthInitial = 100;
         private const float jumpStrengthFinal = 800;
         private const float jumpStrengthTime = 1;
@@ -31,43 +29,52 @@ namespace PlanetJumper.Environment
             }
         }
 
+        protected override float G
+        {
+            get { return 0.4f; }
+        }
+        protected override float artificialG
+        {
+            get { return 0.1f; }
+        }
+
         public Jumper(PlanetGameEnvironment env, Vector2 position)
             : base(env)
         {
             this.position = position;
-            this.velocity = new Vector2(300, 100);
+            this.velocity = new Vector2(200, 0);
         }
 
         public override void Update(UpdateEventArgs e)
         {
+            if (this.environment.State == PlanetGameEnvironment.GameState.DEAD)
+                return;
+
+            // Die of out of screen
+            if (this.position.X + 640 < this.environment.Offset)
+                this.environment.Die();
+
+            // Die if you hit an asteroid
+            foreach (Asteroid a in this.environment.Asteroids)
+                if ((this.position - a.Position).LengthSquared < (Jumper.Size.X + a.Radius) * (Jumper.Size.X + a.Radius))
+                    this.environment.Die();
+
             if (planet == null)
             {
-                Vector2 acc = Vector2.Zero;
-
+                // Check if you are standing on planet
                 foreach (Planet p in this.environment.Planets)
                 {
-                    Vector2 d = p.Position - this.position;
+                    Vector2 d = this.position - p.Position;
 
-                    // Check if you are standing on planet
                     if (d.LengthSquared <= ((p.Radius + Jumper.Size.Y * 0.5f) * (p.Radius + Jumper.Size.Y * 0.5f)))
                     {
                         this.lockToPlanet(p);
                         break;
                     }
-
-                    float a = G * p.Volume * 1 / d.LengthSquared;
-                    d.Normalize();
-                    acc += a * d;
                 }
 
-                // Artificial gravity if out of screen
-                acc.X += Math.Max(0, -this.position.X - this.environment.Offset - 640) * artificialG;
-                acc.X -= Math.Max(0, this.position.X - this.environment.Offset - 640) * artificialG;
-                acc.Y += Math.Max(0, -this.position.Y - 360) * artificialG;
-                acc.Y -= Math.Max(0, this.position.Y - 360) * artificialG;
-
                 if (this.planet == null)
-                    this.velocity += acc;
+                    this.updateVelocity();
             }
             if (planet != null) // yes, not elseif, because planet might become set in the previous if expression
             {
@@ -96,8 +103,8 @@ namespace PlanetJumper.Environment
 
             Vector2 prev = this.position;
             base.Update(e);
-            if (this.position != prev)
-                this.environment.Trail.AddTrail(prev, this.position);
+            //if (this.position != prev)
+                //this.environment.Trail.AddTrail(prev, this.position);
         }
 
         public override void Draw(UpdateEventArgs e)

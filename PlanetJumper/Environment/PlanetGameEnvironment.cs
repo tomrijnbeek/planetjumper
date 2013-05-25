@@ -9,8 +9,7 @@ namespace PlanetJumper.Environment
 {
     class PlanetGameEnvironment : GameEnvironment<PlanetGameEnvironment>
     {
-        // tmp
-        bool dead = false;
+        public enum GameState { ALIVE, DEAD };
 
         public GraphicsManager Graphics
         {
@@ -27,30 +26,36 @@ namespace PlanetJumper.Environment
             get;
             private set;
         }
+        public GameState State { get; private set; }
 
         public LinkedList<Planet> Planets { get; private set; }
+        public LinkedList<Asteroid> Asteroids { get; private set; }
         public TrailManager Trail { get; private set; }
+
+        private float speed = 64;
         
         public PlanetGameEnvironment(Program p, GraphicsManager graphics)
             : base(p)
         {
             this.Graphics = graphics;
             this.Planets = new LinkedList<Planet>();
+            this.Asteroids = new LinkedList<Asteroid>();
             this.Trail = new TrailManager(this);
             this.AddWorldObject("trail", this.Trail);
             this.CameraMatrix = Matrix4.Identity;
 
             this.AddWorldObject("generator", new LevelGenerator(this));
+            this.AddWorldObject("jumper", new Jumper(this, new Vector2(-500, 0)));
+
+            this.State = GameState.ALIVE;
         }
 
         public override void Update(UpdateEventArgs e)
         {
-            if (!this.dead)
-            {
-                this.Offset += 64 * (float)e.ElapsedTimeInS;
-                base.Update(e);
-                this.updateMatrices(e);
-            }
+            this.Offset = Math.Max(this.Offset + this.speed * (float)e.ElapsedTimeInS, this.GetWorldObject<Jumper>("jumper").Position.X - 540);
+            this.speed += (float)(e.ElapsedTimeInS) * 1.5f;
+            this.updateMatrices(e);
+            base.Update(e);
         }
 
         private void updateMatrices(UpdateEventArgs e)
@@ -61,12 +66,10 @@ namespace PlanetJumper.Environment
             else
             {
                 float top = Math.Max(360, jumper.Position.Y + 20);
-                float right = Math.Max(this.Offset + 640, jumper.Position.X + 20);
                 float bottom = Math.Min(-360, jumper.Position.Y - 20);
-                float left = Math.Min(this.Offset - 640, jumper.Position.X - 20);
 
-                Matrix4 translation = Matrix4.CreateTranslation(-0.5f * (left + right), -0.5f * (top + bottom), 0);
-                Matrix4 scale = Matrix4.Scale(Math.Min(1280 / (right - left), 720 / (top - bottom)));
+                Matrix4 translation = Matrix4.CreateTranslation(-this.Offset, -0.5f * (top + bottom), 0);
+                Matrix4 scale = Matrix4.Scale(Math.Min(1, 720 / (top - bottom)));
 
                 this.CameraMatrix = translation * scale;
             }
@@ -78,11 +81,11 @@ namespace PlanetJumper.Environment
         {
             base.Draw(e);
 
-            if (this.dead)
+            if (this.State == GameState.DEAD)
             {
                 this.Graphics.TrailGeometry.Color = Color.Red;
-                this.Graphics.TrailGeometry.DrawLine(-640, -360, 640, 360);
-                this.Graphics.TrailGeometry.DrawLine(640, -360, -640, 360);
+                this.Graphics.TrailGeometry.DrawLine(-640 + this.Offset, -360, 640 + this.Offset, 360);
+                this.Graphics.TrailGeometry.DrawLine(640 + this.Offset, -360, -640 + this.Offset, 360);
             }
         }
 
@@ -92,10 +95,16 @@ namespace PlanetJumper.Environment
             this.Planets.AddLast(p);
             this.AddWorldObject(p.ID, p);
         }
+        public void AddAsteroid(Vector2 position, float radius)
+        {
+            Asteroid a = new Asteroid(this, position, radius);
+            this.Asteroids.AddLast(a);
+            this.AddWorldObject(a.ID, a);
+        }
 
         public void Die()
         {
-            this.dead = true;
+            this.State = GameState.DEAD;
         }
     }
 }
