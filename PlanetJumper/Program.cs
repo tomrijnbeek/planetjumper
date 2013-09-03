@@ -85,6 +85,7 @@ namespace PlanetJumper
             this.graphics.TrailSurface.Render();
             this.graphics.SpaceCoreSurface.Render();
             this.graphics.AsteroidSurface.Render();
+            this.graphics.ScoreSurface.Render();
 
             this.SwapBuffers();
         }

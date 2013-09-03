@@ -18,6 +18,7 @@ namespace PlanetJumper
         public QuadSurface<UVColorVertexData> SpaceCoreSurface { get; private set; }
         public QuadSurface<UVColorVertexData> JumperSurface { get; private set; }
         public QuadSurface<PrimitiveVertexData> TrailSurface { get; private set; }
+        public QuadSurface<UVColorVertexData> ScoreSurface { get; private set; }
 
         public Sprite2DGeometry BackgroundGeometry { get; private set; }
         public Sprite2DGeometry PlanetGeometry { get; private set; }
@@ -25,6 +26,7 @@ namespace PlanetJumper
         public Sprite2DGeometry SpaceCoreGeometry { get; private set; }
         public Sprite2DGeometry JumperGeometry { get; private set; }
         public PrimitiveGeometry TrailGeometry { get; private set; }
+        public FontGeometry ScoreGeometry { get; private set; }
 
         public GraphicsManager()
         {
@@ -36,6 +38,9 @@ namespace PlanetJumper
             this.modelview = new Matrix4Uniform("modelviewMatrix");
             this.projection = new Matrix4Uniform("projectionMatrix");
             this.hudMatrix = new Matrix4Uniform("modelviewMatrix");
+
+            // Font
+            Font quartz = Font.FromJsonFile("data/fonts/Quartz.json");
 
             // Create the surfaces
             #region Background surface
@@ -142,6 +147,25 @@ namespace PlanetJumper
 
             this.TrailGeometry = new PrimitiveGeometry(this.TrailSurface);
             this.TrailGeometry.Color = Color.Cyan;
+            #endregion
+
+            #region Score Surface
+            t = new Texture("data/fonts/Quartz.png");
+
+            this.ScoreSurface = new QuadSurface<UVColorVertexData>();
+            this.ScoreSurface.AddSettings(
+                this.hudMatrix,
+                this.projection,
+                new TextureUniform("diffusetexture", t),
+                SurfaceDepthMaskSetting.DontMask,
+                SurfaceBlendSetting.Alpha
+            );
+
+            this.ScoreSurface.SetShaderProgram(uvShader);
+
+            this.ScoreGeometry = new FontGeometry(this.ScoreSurface, quartz);
+            this.ScoreGeometry.Height = 32;
+            this.ScoreGeometry.SizeCoefficient = new Vector2(1, -1);
             #endregion
         }
 
