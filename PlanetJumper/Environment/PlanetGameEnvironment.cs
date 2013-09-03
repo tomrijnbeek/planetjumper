@@ -26,6 +26,11 @@ namespace PlanetJumper.Environment
             get;
             private set;
         }
+        public float Score
+        {
+            get;
+            private set;
+        }
         public GameState State { get; private set; }
 
         public LinkedList<Planet> Planets { get; private set; }
@@ -53,6 +58,8 @@ namespace PlanetJumper.Environment
         public override void Update(UpdateEventArgs e)
         {
             this.Offset = Math.Max(this.Offset + this.speed * (float)e.ElapsedTimeInS, this.GetWorldObject<Jumper>("jumper").Position.X - 540);
+            if (this.State == GameState.ALIVE)
+                this.Score = (int)(0.1f * this.Offset);
             this.speed += (float)(e.ElapsedTimeInS) * 2.0f;
             this.updateMatrices(e);
             base.Update(e);
@@ -82,6 +89,8 @@ namespace PlanetJumper.Environment
             this.Graphics.BackgroundGeometry.DrawSprite(Vector2.Zero);
 
             base.Draw(e);
+
+            this.Graphics.ScoreGeometry.DrawString(Vector2.Zero, this.Score.ToString(), 1);
 
             if (this.State == GameState.DEAD)
             {

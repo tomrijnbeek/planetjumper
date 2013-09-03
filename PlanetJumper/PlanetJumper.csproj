@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWGraphics">
-      <HintPath>libs\AWGraphics.dll</HintPath>
+    <Reference Include="amulware.Graphics">
+      <HintPath>libs\amulware.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
       <HintPath>libs\OpenTK.dll</HintPath>
@@ -75,10 +75,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="src\" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="data\fonts\Quartz.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="data\shaders\simple_fs.glsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -93,6 +94,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\fonts\Quartz.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="data\graphics\asteroid.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

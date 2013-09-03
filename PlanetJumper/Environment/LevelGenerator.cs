@@ -145,6 +145,9 @@ namespace PlanetJumper.Environment
 
         private bool checkPosition(Vector2 position, float r)
         {
+            // Add jumper length to the radius to make sure you can't hit it.
+            r += Jumper.Size.Y;
+
             foreach (Planet p in this.planets)
                 if ((p.Position - position).LengthSquared <= (r + p.Radius) * (r + p.Radius))
                     return false;
