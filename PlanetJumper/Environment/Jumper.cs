@@ -91,7 +91,6 @@ namespace PlanetJumper.Environment
                         this.builtStrength = jumpStrengthInitial;
                     else
                         this.builtStrength = Math.Min(jumpStrengthFinal, this.builtStrength + (jumpStrengthFinal - jumpStrengthInitial) / jumpStrengthTime * (float)e.ElapsedTimeInS);
-                    Console.WriteLine(this.builtStrength);
                 }
                 else if (this.builtStrength > 0)
                 {
@@ -110,6 +109,9 @@ namespace PlanetJumper.Environment
         public override void Draw(UpdateEventArgs e)
         {
             this.environment.Graphics.JumperGeometry.DrawSprite(this.position, this.angle);
+
+            // Strength bar
+            this.environment.Graphics.OverlayGeometry.DrawRectangle(-500, -320, Math.Max(0, (this.builtStrength - jumpStrengthInitial) / (jumpStrengthFinal - jumpStrengthInitial)) * 1000, 20);
         }
 
         private void lockToPlanet(Planet p)

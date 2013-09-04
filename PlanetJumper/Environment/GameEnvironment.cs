@@ -63,6 +63,12 @@ namespace PlanetJumper.Environment
                 this.drawableWorldObjects.Remove((DrawableWorldObject<Env>)wo);
         }
 
+        public virtual void Reset()
+        {
+            this.worldObjects.Clear();
+            this.drawableWorldObjects.Clear();
+        }
+
         public virtual void Update(UpdateEventArgs e)
         {
             WorldObject<Env>[] objArray = new WorldObject<Env>[this.worldObjects.Count];
