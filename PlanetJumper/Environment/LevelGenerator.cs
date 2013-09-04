@@ -31,7 +31,7 @@ namespace PlanetJumper.Environment
         private const float repellingPlanetChanceIncrease = 0.0025f;
         private const float repellingPlanetChanceMax = 0.06f;
 
-        private const float spacecoreChance = 1 / 18000; // expected: once per hour
+        private const float spacecoreChance = 1 / 6000; // expected: once per 20 minutes
         #endregion
 
         private float asteroidChance = asteroidChanceInitial;
@@ -58,6 +58,15 @@ namespace PlanetJumper.Environment
 
                 this.environment.AddPlanet(this.selectFactory(), new Vector2(x, y), r);
             }*/
+
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(-490, -240), 30);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(-300, 270), 15);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(-200, 300), 35);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(80, -110), 70);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(310, -295), 25);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(640, 140), 65);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(800, -220), 40);
+            this.environment.AddPlanet(new OrdinaryPlanetFactory(), new Vector2(920, 40), 35);
         }
 
         public override void Update(UpdateEventArgs e)

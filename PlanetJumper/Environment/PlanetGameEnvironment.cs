@@ -37,12 +37,20 @@ namespace PlanetJumper.Environment
         public LinkedList<Asteroid> Asteroids { get; private set; }
         public TrailManager Trail { get; private set; }
 
-        private float speed = 64;
+        private float speed;
         
         public PlanetGameEnvironment(Program p, GraphicsManager graphics)
             : base(p)
         {
             this.Graphics = graphics;
+
+            this.Reset();
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+
             this.Planets = new LinkedList<Planet>();
             this.Asteroids = new LinkedList<Asteroid>();
             this.Trail = new TrailManager(this);
@@ -52,6 +60,10 @@ namespace PlanetJumper.Environment
             this.AddWorldObject("generator", new LevelGenerator(this));
             this.AddWorldObject("jumper", new Jumper(this, new Vector2(-500, 0)));
 
+            this.Offset = 0;
+            this.Score = 0;
+            this.speed = 64;
+
             this.State = GameState.ALIVE;
         }
 
@@ -60,6 +72,8 @@ namespace PlanetJumper.Environment
             this.Offset = Math.Max(this.Offset + this.speed * (float)e.ElapsedTimeInS, this.GetWorldObject<Jumper>("jumper").Position.X - 540);
             if (this.State == GameState.ALIVE)
                 this.Score = (int)(0.1f * this.Offset);
+            else if (this.Keyboard[Key.R])
+                this.Reset();
             this.speed += (float)(e.ElapsedTimeInS) * 2.0f;
             this.updateMatrices(e);
             base.Update(e);
@@ -90,13 +104,19 @@ namespace PlanetJumper.Environment
 
             base.Draw(e);
 
-            this.Graphics.ScoreGeometry.DrawString(Vector2.Zero, this.Score.ToString(), 1);
-
-            if (this.State == GameState.DEAD)
+            if (this.State == GameState.ALIVE)
             {
-                this.Graphics.TrailGeometry.Color = Color.Red;
-                this.Graphics.TrailGeometry.DrawLine(-640 + this.Offset, -360, 640 + this.Offset, 360);
-                this.Graphics.TrailGeometry.DrawLine(640 + this.Offset, -360, -640 + this.Offset, 360);
+                this.Graphics.ScoreGeometry.Height = 32;
+                this.Graphics.ScoreGeometry.DrawString(new Vector2(620, 350), this.Score.ToString(), 1);
+            }
+            else
+            {
+                this.Graphics.ScoreGeometry.Height = 128;
+                this.Graphics.ScoreGeometry.DrawString(new Vector2(0, 150), "Game Over", 0.5f);
+
+                this.Graphics.ScoreGeometry.Height = 48;
+                this.Graphics.ScoreGeometry.DrawString(new Vector2(0, 0), this.Score.ToString(), 0.5f);
+                this.Graphics.ScoreGeometry.DrawString(new Vector2(0, -100), "Press 'R' to start over", 0.5f);
             }
         }
 
