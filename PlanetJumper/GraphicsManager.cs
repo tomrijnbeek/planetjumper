@@ -12,14 +12,14 @@ namespace PlanetJumper
         Matrix4Uniform hudMatrix;
         Matrix4Uniform projection;
 
-        public QuadSurface<UVColorVertexData> BackgroundSurface { get; private set; }
-        public QuadSurface<UVColorVertexData> PlanetSurface { get; private set; }
-        public QuadSurface<UVColorVertexData> AsteroidSurface { get; private set; }
-        public QuadSurface<UVColorVertexData> SpaceCoreSurface { get; private set; }
-        public QuadSurface<UVColorVertexData> JumperSurface { get; private set; }
-        public QuadSurface<PrimitiveVertexData> TrailSurface { get; private set; }
-        public QuadSurface<UVColorVertexData> ScoreSurface { get; private set; }
-        public QuadSurface<PrimitiveVertexData> OverlaySurface { get; private set; }
+		public IndexedSurface<UVColorVertexData> BackgroundSurface { get; private set; }
+		public IndexedSurface<UVColorVertexData> PlanetSurface { get; private set; }
+		public IndexedSurface<UVColorVertexData> AsteroidSurface { get; private set; }
+		public IndexedSurface<UVColorVertexData> SpaceCoreSurface { get; private set; }
+		public IndexedSurface<UVColorVertexData> JumperSurface { get; private set; }
+		public IndexedSurface<PrimitiveVertexData> TrailSurface { get; private set; }
+		public IndexedSurface<UVColorVertexData> ScoreSurface { get; private set; }
+		public IndexedSurface<PrimitiveVertexData> OverlaySurface { get; private set; }
 
         public Sprite2DGeometry BackgroundGeometry { get; private set; }
         public Sprite2DGeometry PlanetGeometry { get; private set; }
@@ -33,8 +33,8 @@ namespace PlanetJumper
         public GraphicsManager()
         {
             // Load Shader Programs.
-            ShaderProgram simpleShader = new ShaderProgram("data/shaders/simple_vs.glsl", "data/shaders/simple_fs.glsl");
-            ShaderProgram uvShader = new ShaderProgram("data/shaders/uvcolor_vs.glsl", "data/shaders/uvcolor_fs.glsl");
+			ShaderProgram simpleShader = new ShaderProgram(VertexShader.FromFile("data/shaders/simple_vs.glsl"), FragmentShader.FromFile("data/shaders/simple_fs.glsl"));
+			ShaderProgram uvShader = new ShaderProgram(VertexShader.FromFile("data/shaders/uvcolor_vs.glsl"), FragmentShader.FromFile("data/shaders/uvcolor_fs.glsl"));
 
             // Create matrix uniforms used for rendering.
             this.modelview = new Matrix4Uniform("modelviewMatrix");
@@ -48,7 +48,7 @@ namespace PlanetJumper
             #region Background surface
             Texture t = new Texture("data/graphics/omega-nebula.jpg");
 
-            this.BackgroundSurface = new QuadSurface<UVColorVertexData>();
+			this.BackgroundSurface = new IndexedSurface<UVColorVertexData>();
             this.BackgroundSurface.AddSettings(
                 this.hudMatrix,
                 this.projection,
@@ -67,7 +67,7 @@ namespace PlanetJumper
             #region Planet Surface
             t = new Texture("data/graphics/planet.png");
 
-            this.PlanetSurface = new QuadSurface<UVColorVertexData>();
+			this.PlanetSurface = new IndexedSurface<UVColorVertexData>();
             this.PlanetSurface.AddSettings(
                 this.modelview,
                 this.projection,
@@ -85,7 +85,7 @@ namespace PlanetJumper
             #region Asteroid Surface
             t = new Texture("data/graphics/asteroid.png");
 
-            this.AsteroidSurface = new QuadSurface<UVColorVertexData>();
+			this.AsteroidSurface = new IndexedSurface<UVColorVertexData>();
             this.AsteroidSurface.AddSettings(
                 this.modelview,
                 this.projection,
@@ -103,7 +103,7 @@ namespace PlanetJumper
             #region Space Core Surface
             t = new Texture("data/graphics/spacecore.png");
 
-            this.SpaceCoreSurface = new QuadSurface<UVColorVertexData>();
+			this.SpaceCoreSurface = new IndexedSurface<UVColorVertexData>();
             this.SpaceCoreSurface.AddSettings(
                 this.modelview,
                 this.projection,
@@ -121,7 +121,7 @@ namespace PlanetJumper
             #region Jumper Surface
             t = new Texture("data/graphics/jumper.png");
 
-            this.JumperSurface = new QuadSurface<UVColorVertexData>();
+			this.JumperSurface = new IndexedSurface<UVColorVertexData>();
             this.JumperSurface.AddSettings(
                 this.modelview,
                 this.projection,
@@ -137,7 +137,7 @@ namespace PlanetJumper
             #endregion
 
             #region Trail Surface
-            this.TrailSurface = new QuadSurface<PrimitiveVertexData>();
+			this.TrailSurface = new IndexedSurface<PrimitiveVertexData>();
             this.TrailSurface.AddSettings(
                 this.modelview,
                 this.projection,
@@ -154,7 +154,7 @@ namespace PlanetJumper
             #region Score Surface
             t = new Texture("data/fonts/Quartz.png");
 
-            this.ScoreSurface = new QuadSurface<UVColorVertexData>();
+			this.ScoreSurface = new IndexedSurface<UVColorVertexData>();
             this.ScoreSurface.AddSettings(
                 this.hudMatrix,
                 this.projection,
@@ -171,7 +171,7 @@ namespace PlanetJumper
             #endregion
 
             #region Overlay surface
-            this.OverlaySurface = new QuadSurface<PrimitiveVertexData>();
+			this.OverlaySurface = new IndexedSurface<PrimitiveVertexData>();
             this.OverlaySurface.AddSettings(
                 this.hudMatrix,
                 this.projection,

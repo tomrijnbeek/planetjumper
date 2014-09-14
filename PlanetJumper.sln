@@ -14,6 +14,9 @@ Global
 		{42EC5D76-CCD9-41E3-AA59-11ABE2B11FCD}.Release|x86.ActiveCfg = Release|x86
 		{42EC5D76-CCD9-41E3-AA59-11ABE2B11FCD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = PlanetJumper\PlanetJumper.csproj
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
